@@ -1,0 +1,4 @@
+streamlit
+evds
+pandas
+openpyxl
