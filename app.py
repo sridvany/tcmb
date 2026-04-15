@@ -238,12 +238,11 @@ if active_ticker:
 
     except Exception as e:
         err_msg = str(e).lower()
-        if any(x in err_msg for x in ["401", "403", "unauthorized", "key", "api"]):
+        if any(x in err_msg for x in ["401", "403", "unauthorized", "invalid key", "api key"]):
             st.error("❌ API key geçersiz veya süresi dolmuş.")
             st.warning("👈 Sol menüden yeni API key girin. Key almak için: https://evds3.tcmb.gov.tr")
         else:
             st.error(f"Hata: {e}")
-            st.info("👈 Sorun devam ederse sol menüden API key'i manuel girin.")
 
 elif not active_ticker:
     st.info("Yukarıdan bir ticker seçin veya manuel kod girin.")
