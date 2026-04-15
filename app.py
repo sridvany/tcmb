@@ -4,8 +4,8 @@ from evds import evdsAPI
 from io import BytesIO
 from datetime import datetime
 
-st.set_page_config(page_title="EVDS Veri Çekici", layout="wide")
-st.title("📊 TCMB EVDS Veri Çekici")
+st.set_page_config(page_title="EVDS Veri Robotu", layout="wide")
+st.title("📊 TCMB EVDS Veri Robotu")
 
 # --- Ticker Listesi ---
 TICKERS = {
@@ -132,7 +132,7 @@ DEFAULT_API_KEY = "SnWnU6PUDF"
 with st.sidebar:
     st.header("⚙️ Ayarlar")
     override_key = st.text_input("API Key (opsiyonel)", type="password", placeholder="Hata alırsanız buraya girin")
-    st.caption("TCMB EVDS Veri Çekici")
+    st.caption("TCMB EVDS Veri Robotu")
 
 API_KEY = override_key.strip() if override_key.strip() else DEFAULT_API_KEY
 
