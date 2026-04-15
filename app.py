@@ -7,126 +7,6 @@ from datetime import datetime
 st.set_page_config(page_title="EVDS Veri Robotu", layout="wide")
 st.title("📊 TCMB EVDS Veri Robotu")
 
-# --- Ticker Listesi ---
-TICKERS = {
-    # Döviz Kurları
-    "TP.DK.USD.A": "USD/TRY Alış",
-    "TP.DK.USD.S": "USD/TRY Satış",
-    "TP.DK.EUR.A": "EUR/TRY Alış",
-    "TP.DK.EUR.S": "EUR/TRY Satış",
-    "TP.DK.GBP.A": "GBP/TRY Alış",
-    "TP.DK.GBP.S": "GBP/TRY Satış",
-    "TP.DK.JPY.A": "JPY/TRY Alış",
-    "TP.DK.JPY.S": "JPY/TRY Satış",
-    "TP.DK.CHF.A": "CHF/TRY Alış",
-    "TP.DK.CHF.S": "CHF/TRY Satış",
-    "TP.DK.CAD.A": "CAD/TRY Alış",
-    "TP.DK.CAD.S": "CAD/TRY Satış",
-    "TP.DK.AUD.A": "AUD/TRY Alış",
-    "TP.DK.AUD.S": "AUD/TRY Satış",
-    "TP.DK.SEK.A": "SEK/TRY Alış",
-    "TP.DK.SEK.S": "SEK/TRY Satış",
-    "TP.DK.NOK.A": "NOK/TRY Alış",
-    "TP.DK.NOK.S": "NOK/TRY Satış",
-    "TP.DK.DKK.A": "DKK/TRY Alış",
-    "TP.DK.DKK.S": "DKK/TRY Satış",
-    "TP.DK.SAR.A": "SAR/TRY Alış",
-    "TP.DK.SAR.S": "SAR/TRY Satış",
-    "TP.DK.KWD.A": "KWD/TRY Alış",
-    "TP.DK.KWD.S": "KWD/TRY Satış",
-    "TP.DK.RUB.A": "RUB/TRY Alış",
-    "TP.DK.RUB.S": "RUB/TRY Satış",
-    "TP.DK.CNY.A": "CNY/TRY Alış",
-    "TP.DK.CNY.S": "CNY/TRY Satış",
-    "TP.DK.QAR.A": "QAR/TRY Alış",
-    "TP.DK.QAR.S": "QAR/TRY Satış",
-    "TP.DK.BGN.A": "BGN/TRY Alış",
-    "TP.DK.RON.A": "RON/TRY Alış",
-    "TP.DK.IRR.A": "IRR/TRY Alış",
-    "TP.DK.PKR.A": "PKR/TRY Alış",
-    # Enflasyon
-    "TP.FG.J0": "TÜFE (Genel)",
-    "TP.FG.J01": "TÜFE - Gıda ve Alkolsüz İçecekler",
-    "TP.FG.J02": "TÜFE - Alkollü İçecekler ve Tütün",
-    "TP.FG.J03": "TÜFE - Giyim ve Ayakkabı",
-    "TP.FG.J04": "TÜFE - Konut",
-    "TP.FG.J05": "TÜFE - Ev Eşyası",
-    "TP.FG.J06": "TÜFE - Sağlık",
-    "TP.FG.J07": "TÜFE - Ulaştırma",
-    "TP.FG.J08": "TÜFE - Haberleşme",
-    "TP.FG.J09": "TÜFE - Eğlence ve Kültür",
-    "TP.FG.J10": "TÜFE - Eğitim",
-    "TP.FG.J11": "TÜFE - Lokanta ve Oteller",
-    "TP.FG.J12": "TÜFE - Çeşitli Mal ve Hizmetler",
-    "TP.FG.D01": "ÜFE (Genel)",
-    # Faiz Oranları
-    "TP.TRF.A01": "Mevduat Faizi (TL, 1 Aya Kadar)",
-    "TP.TRF.A02": "Mevduat Faizi (TL, 3 Aya Kadar)",
-    "TP.TRF.A03": "Mevduat Faizi (TL, 6 Aya Kadar)",
-    "TP.TRF.A04": "Mevduat Faizi (TL, 1 Yıla Kadar)",
-    "TP.TRF.A05": "Mevduat Faizi (TL, 1 Yıldan Fazla)",
-    "TP.HABER.A01": "TCMB Politika Faizi",
-    "TP.HABER.A02": "Gecelik Borçlanma Faizi",
-    "TP.HABER.A03": "Gecelik Borç Verme Faizi",
-    # Büyüme / GSYH
-    "TP.GY1.N2": "GSYH Büyümesi (Yıllık %)",
-    "TP.GY1.N3": "GSYH (Cari Fiyatlarla, TL)",
-    "TP.GY1.N4": "GSYH (Sabit Fiyatlarla)",
-    "TP.GSYIH01.GY.CF": "GSYH - Özel Tüketim",
-    "TP.GSYIH02.GY.CF": "GSYH - Kamu Tüketimi",
-    "TP.GSYIH03.GY.CF": "GSYH - Sabit Sermaye Yatırımı",
-    "TP.GSYIH04.GY.CF": "GSYH - İhracat",
-    "TP.GSYIH05.GY.CF": "GSYH - İthalat",
-    # Enflasyon Beklentileri
-    "TP.ENFBEK.PKA12ENF": "Enflasyon Beklentisi - Piyasa (12 Ay)",
-    "TP.ENFBEK.IYA12ENF": "Enflasyon Beklentisi - Reel Sektör (12 Ay)",
-    "TP.ENFBEK.TKA12ENF": "Enflasyon Beklentisi - Tüketici (12 Ay)",
-    # Para Arzı
-    "TP.MD.TUM01": "M1 Para Arzı",
-    "TP.MD.TUM02": "M2 Para Arzı",
-    "TP.MD.TUM03": "M3 Para Arzı",
-    # Kredi
-    "TP.KTF10": "Toplam Kredi (TL)",
-    "TP.KTF11": "Bireysel Kredi (TL)",
-    "TP.KTF12": "Ticari Kredi (TL)",
-    "TP.KRE.GEN01": "Kredi Büyümesi (Yıllık %)",
-    # İşgücü
-    "TP.ISGUCU2.G1": "İşsizlik Oranı (%)",
-    "TP.ISGUCU2.G2": "İstihdam Oranı (%)",
-    "TP.ISGUCU2.G3": "İşgücüne Katılım Oranı (%)",
-    # Dış Ticaret
-    "TP.IHRACAT01": "İhracat (Milyon USD)",
-    "TP.ITHALAT01": "İthalat (Milyon USD)",
-    "TP.DISTICARET.A1": "Dış Ticaret Dengesi",
-    # Ödemeler Dengesi
-    "TP.ODEMGZS.ABD004": "Cari Denge (Milyon USD)",
-    "TP.ODEMGZS.ABD032": "Cari Denge - Ticaret Dengesi",
-    "TP.ODEMGZS.ABD046": "Doğrudan Yatırım Girişi",
-    "TP.ODEMGZS.ABD050": "Portföy Yatırımı Net",
-    # Rezervler
-    "TP.AB.B1": "TCMB Toplam Rezervler (Milyon USD)",
-    "TP.AB.C1": "TCMB Altın Rezervleri",
-    "TP.AB.N1": "Net Rezervler",
-    # Bütçe
-    "TP.BUTCE.G1": "Merkezi Yönetim Bütçe Dengesi",
-    "TP.BUTCE.G2": "Bütçe Gelirleri",
-    "TP.BUTCE.G3": "Bütçe Harcamaları",
-    # Konut
-    "TP.HKFE01": "Konut Fiyat Endeksi",
-    "TP.HKFE02": "Konut Satış Sayısı",
-    # Sanayi
-    "TP.SANAYIÜRETIM.G1": "Sanayi Üretim Endeksi",
-    "TP.SANAYIÜRETIM.G2": "İmalat Sanayi Üretim Endeksi",
-    # Borsalar
-    "TP.MKBIST100": "BIST 100 Endeksi",
-    "TP.MKBIST30": "BIST 30 Endeksi",
-}
-
-# Ters sözlük: isim → kod
-NAME_TO_CODE = {v: k for k, v in TICKERS.items()}
-ticker_options = [f"{v}  [{k}]" for k, v in TICKERS.items()]
-
-# --- Sidebar ---
 DEFAULT_API_KEY = "SnWnU6PUDF"
 
 with st.sidebar:
@@ -136,92 +16,141 @@ with st.sidebar:
 
 API_KEY = override_key.strip() if override_key.strip() else DEFAULT_API_KEY
 
-# --- Ana Alan ---
+@st.cache_data(show_spinner="Ana kategoriler yükleniyor...")
+def load_main_categories(api_key):
+    evds = evdsAPI(api_key)
+    return evds.main_categories
+
+@st.cache_data(show_spinner="Alt kategoriler yükleniyor...")
+def load_sub_categories(api_key, cat_index):
+    evds = evdsAPI(api_key)
+    return evds.get_sub_categories(cat_index)
+
+@st.cache_data(show_spinner="Seriler yükleniyor...")
+def load_series(api_key, sub_code):
+    evds = evdsAPI(api_key)
+    return evds.get_series(sub_code)
+
+# Ana kategoriler
+try:
+    main_cats = load_main_categories(API_KEY)
+except Exception as e:
+    st.error(f"Kategoriler yüklenemedi: {e}")
+    st.warning("👈 Sol menüden API key girin. Key almak için: https://evds3.tcmb.gov.tr")
+    st.stop()
+
+cat_name_col = next((c for c in main_cats.columns if "TOPIC_TITLE" in c and "ENG" not in c), main_cats.columns[0])
+cat_id_col   = next((c for c in main_cats.columns if "CATEGORY_ID" in c), main_cats.columns[0])
+
+cat_options = ["— Seçin —"] + [
+    f"{row[cat_name_col]}  [#{int(row[cat_id_col])}]"
+    for _, row in main_cats.iterrows()
+]
+
 col1, col2 = st.columns([2, 1])
 
 with col1:
-    # Ticker seçimi
-    selected_display = st.selectbox(
-        "Ticker Ara / Seç",
-        options=[""] + ticker_options,
-        format_func=lambda x: x if x else "— Listeden seçin —"
+    selected_cat = st.selectbox("1️⃣ Ana Kategori", cat_options)
+
+sub_options = []
+sub_cats_df = None
+
+if selected_cat != "— Seçin —":
+    cat_idx = int(selected_cat.split("[#")[-1].rstrip("]"))
+    try:
+        sub_cats_df = load_sub_categories(API_KEY, cat_idx)
+        sub_name_col = next((c for c in sub_cats_df.columns if "DATAGROUP_NAME" in c and "ENG" not in c), sub_cats_df.columns[0])
+        sub_code_col = next((c for c in sub_cats_df.columns if "DATAGROUP_CODE" in c), sub_cats_df.columns[0])
+        sub_options = ["— Seçin —"] + [
+            f"{row[sub_name_col]}  [{row[sub_code_col]}]"
+            for _, row in sub_cats_df.iterrows()
+        ]
+    except Exception as e:
+        st.warning(f"Alt kategoriler yüklenemedi: {e}")
+
+with col1:
+    selected_sub = st.selectbox(
+        "2️⃣ Alt Kategori / Veri Grubu",
+        sub_options if sub_options else ["— Önce ana kategori seçin —"]
     )
 
-    # Manuel giriş
-    manual_code = st.text_input("veya Manuel Ticker Kodu Gir", placeholder="örn: TP.DK.USD.A")
+series_options = []
+series_map = {}
 
-    # Aktif ticker belirle
-    if manual_code.strip():
-        active_ticker = manual_code.strip()
-        active_name = TICKERS.get(active_ticker, active_ticker)
-    elif selected_display:
-        # "[KOD]" kısmını ayıkla
-        active_ticker = selected_display.split("[")[-1].rstrip("]")
-        active_name = TICKERS.get(active_ticker, active_ticker)
-    else:
-        active_ticker = None
-        active_name = None
+if selected_sub and selected_sub not in ("— Seçin —", "— Önce ana kategori seçin —"):
+    sub_code = selected_sub.split("[")[-1].rstrip("]")
+    try:
+        series_df = load_series(API_KEY, sub_code)
+        serie_name_col = next((c for c in series_df.columns if "SERIE_NAME" in c and "ENG" not in c), series_df.columns[0])
+        serie_code_col = next((c for c in series_df.columns if "SERIE_CODE" in c), series_df.columns[0])
+        for _, row in series_df.iterrows():
+            label = f"{row[serie_name_col]}  [{row[serie_code_col]}]"
+            series_map[label] = str(row[serie_code_col])
+        series_options = ["— Seçin —"] + list(series_map.keys())
+    except Exception as e:
+        st.warning(f"Seriler yüklenemedi: {e}")
+
+with col1:
+    selected_series = st.selectbox(
+        "3️⃣ Seri Seç",
+        series_options if series_options else ["— Önce alt kategori seçin —"]
+    )
+    manual_code = st.text_input("veya Manuel Ticker Kodu Gir", placeholder="örn: TP.DK.USD.A")
 
 with col2:
     st.markdown("**Tarih Aralığı**")
     start_date = st.date_input("Başlangıç", value=datetime(2010, 1, 1))
-    end_date = st.date_input("Bitiş", value=datetime.today())
+    end_date   = st.date_input("Bitiş",     value=datetime.today())
 
-# --- Veri Çekme ---
+# Aktif ticker
+if manual_code.strip():
+    active_ticker = manual_code.strip()
+    active_name   = active_ticker
+elif selected_series and selected_series not in ("— Seçin —", "— Önce alt kategori seçin —"):
+    active_ticker = series_map.get(selected_series)
+    active_name   = selected_series.split("  [")[0]
+else:
+    active_ticker = None
+    active_name   = None
+
+# Veri çekme
 if active_ticker:
     try:
-        evds = evdsAPI(API_KEY)
-
+        evds_client = evdsAPI(API_KEY)
         fmt = "%d-%m-%Y"
-        df = evds.get_data(
+        df = evds_client.get_data(
             [active_ticker],
             startdate=start_date.strftime(fmt),
             enddate=end_date.strftime(fmt)
         )
 
         if df is not None and not df.empty:
-            df = df.dropna(subset=[col for col in df.columns if col != "Tarih"])
+            date_col   = "Tarih" if "Tarih" in df.columns else df.columns[0]
+            value_cols = [c for c in df.columns if c != date_col]
+            df[date_col]   = pd.to_datetime(df[date_col], errors="coerce")
+            df[value_cols] = df[value_cols].apply(pd.to_numeric, errors="coerce")
+            df = df.dropna(subset=value_cols, how="all").sort_values(date_col)
 
-            # Tarih sütununu bul
-            date_col = "Tarih" if "Tarih" in df.columns else df.columns[0]
-            df[date_col] = pd.to_datetime(df[date_col], errors="coerce")
-            df = df.sort_values(date_col)
-
-            # --- Metadata ---
             st.markdown("---")
             st.subheader(f"📌 {active_name}")
 
             m1, m2, m3, m4 = st.columns(4)
-            m1.metric("Ticker Kodu", active_ticker)
+            m1.metric("Ticker Kodu",     active_ticker)
             m2.metric("İlk Veri Tarihi", df[date_col].min().strftime("%d.%m.%Y"))
             m3.metric("Son Veri Tarihi", df[date_col].max().strftime("%d.%m.%Y"))
-            m4.metric("Toplam Gözlem", len(df))
+            m4.metric("Toplam Gözlem",   len(df))
 
-            # Periyot tahmini
             if len(df) > 1:
-                delta = (df[date_col].iloc[-1] - df[date_col].iloc[0]).days / len(df)
-                if delta < 2:
-                    period = "Günlük"
-                elif delta < 10:
-                    period = "Haftalık"
-                elif delta < 35:
-                    period = "Aylık"
-                elif delta < 100:
-                    period = "Çeyreklik"
-                else:
-                    period = "Yıllık"
+                delta  = (df[date_col].iloc[-1] - df[date_col].iloc[0]).days / len(df)
+                period = ("Günlük" if delta < 2 else "Haftalık" if delta < 10
+                          else "Aylık" if delta < 35 else "Çeyreklik" if delta < 100 else "Yıllık")
                 st.info(f"📅 Tahmini Periyot: **{period}** (ortalama {delta:.1f} gün aralık)")
 
-            # --- Grafik ---
-            value_col = [c for c in df.columns if c != date_col][0]
-            df_plot = df.set_index(date_col)[value_col].astype(float)
-            st.line_chart(df_plot)
+            st.line_chart(df.set_index(date_col)[value_cols[0]])
 
-            # --- Tablo Önizleme ---
             with st.expander("📋 Veri Önizleme"):
                 st.dataframe(df, use_container_width=True)
 
-            # --- Excel İndir ---
             output = BytesIO()
             with pd.ExcelWriter(output, engine="openpyxl") as writer:
                 df.to_excel(writer, index=False, sheet_name=active_ticker[:30])
@@ -243,6 +172,5 @@ if active_ticker:
             st.warning("👈 Sol menüden yeni API key girin. Key almak için: https://evds3.tcmb.gov.tr")
         else:
             st.error(f"Hata: {e}")
-
-elif not active_ticker:
-    st.info("Yukarıdan bir ticker seçin veya manuel kod girin.")
+else:
+    st.info("Kategori → Alt Kategori → Seri seçin, veya manuel kod girin.")
