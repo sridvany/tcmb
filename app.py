@@ -127,11 +127,14 @@ NAME_TO_CODE = {v: k for k, v in TICKERS.items()}
 ticker_options = [f"{v}  [{k}]" for k, v in TICKERS.items()]
 
 # --- Sidebar ---
+DEFAULT_API_KEY = "SnWnU6PUDF"
+
 with st.sidebar:
     st.header("⚙️ Ayarlar")
-    api_key = st.text_input("API Key", type="password", value=st.secrets.get("EVDS_KEY", ""))
-    st.markdown("---")
-    st.caption("API key almak için: [evds3.tcmb.gov.tr](https://evds3.tcmb.gov.tr)")
+    override_key = st.text_input("API Key (opsiyonel)", type="password", placeholder="Hata alırsanız buraya girin")
+    st.caption("TCMB EVDS Veri Çekici")
+
+API_KEY = override_key.strip() if override_key.strip() else DEFAULT_API_KEY
 
 # --- Ana Alan ---
 col1, col2 = st.columns([2, 1])
@@ -165,9 +168,9 @@ with col2:
     end_date = st.date_input("Bitiş", value=datetime.today())
 
 # --- Veri Çekme ---
-if active_ticker and api_key:
+if active_ticker:
     try:
-        evds = evdsAPI(api_key)
+        evds = evdsAPI(API_KEY)
 
         fmt = "%d-%m-%Y"
         df = evds.get_data(
@@ -234,9 +237,13 @@ if active_ticker and api_key:
             st.warning("Bu tarih aralığında veri bulunamadı.")
 
     except Exception as e:
-        st.error(f"Hata: {e}")
+        err_msg = str(e).lower()
+        if any(x in err_msg for x in ["401", "403", "unauthorized", "key", "api"]):
+            st.error("❌ API key geçersiz veya süresi dolmuş.")
+            st.warning("👈 Sol menüden yeni API key girin. Key almak için: https://evds3.tcmb.gov.tr")
+        else:
+            st.error(f"Hata: {e}")
+            st.info("👈 Sorun devam ederse sol menüden API key'i manuel girin.")
 
-elif active_ticker and not api_key:
-    st.warning("Lütfen sol menüden API key girin.")
 elif not active_ticker:
     st.info("Yukarıdan bir ticker seçin veya manuel kod girin.")
