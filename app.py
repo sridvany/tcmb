@@ -59,12 +59,15 @@ if selected_cat != "— Seçin —":
     cat_idx = int(selected_cat.split("[#")[-1].rstrip("]"))
     try:
         sub_cats_df = load_sub_categories(API_KEY, cat_idx)
-        sub_name_col = next((c for c in sub_cats_df.columns if "DATAGROUP_NAME" in c and "ENG" not in c), sub_cats_df.columns[0])
-        sub_code_col = next((c for c in sub_cats_df.columns if "DATAGROUP_CODE" in c), sub_cats_df.columns[0])
-        sub_options = ["— Seçin —"] + [
-            f"{row[sub_name_col]}  [{row[sub_code_col]}]"
-            for _, row in sub_cats_df.iterrows()
-        ]
+        if sub_cats_df is None or sub_cats_df.empty:
+            st.warning("Bu kategori için alt kategori bulunamadı.")
+        else:
+            sub_name_col = next((c for c in sub_cats_df.columns if "DATAGROUP_NAME" in c and "ENG" not in c), sub_cats_df.columns[0])
+            sub_code_col = next((c for c in sub_cats_df.columns if "DATAGROUP_CODE" in c), sub_cats_df.columns[0])
+            sub_options = ["— Seçin —"] + [
+                f"{row[sub_name_col]}  [{row[sub_code_col]}]"
+                for _, row in sub_cats_df.iterrows()
+            ]
     except Exception as e:
         st.warning(f"Alt kategoriler yüklenemedi: {e}")
 
